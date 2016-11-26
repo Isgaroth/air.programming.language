@@ -1,0 +1,100 @@
+a = (E + 2) * #0F
+b = PI + a
+str = "Hello World!"
+
+println "Hello World!"
+
+if 1.0 <= 2.0 println "Yes"
+else println "No"
+
+println "a = " + a
+println "b = " + b
+
+println ""
+
+if 10 > 5 && 10 > 20 && 5 == 5 || 4 < 5 println "TRUE"
+else println "FALSE"
+
+if 40 < 50 || 50 > 60 {
+    println "kek"
+    println "lol"
+    if 2 > 2 println "azaza?"
+    else {
+        println "azaza!"
+    }
+} else print "false"
+
+println ""
+
+i = 0
+while i < 10 {
+    i = i + 1
+    if i == 4 continue
+    println "i = " + i
+    if i == 7 break
+}
+
+println ""
+
+for i = 0; i < 10; i = i + 1 {
+    if i == 5 continue
+    println("i = " + i)
+    if i == 8 break
+}
+println ""
+
+i = 0
+repeat {
+    println("i = " + i)
+    i = i + 1
+} until i < 10
+
+println ""
+
+for  i = 0; i < 10; i = i + 1 {
+    println sin(i)
+}
+
+println ""
+
+echo(1, 2, 3, "4", "5", "Hello air!")
+
+println ""
+
+a = "print"
+println a
+
+def getStatement(a, b) {
+    echo("a = ", a, "b = ", b)
+}
+
+getStatement(2, 2)
+
+print a
+
+println "\n"
+
+def sum(a, b) {
+    return a + b
+}
+
+println sum(2, 2)
+
+println "\n"
+
+firstArray = [2, 2, 3, sum(2, 2), 5, [1, 2]]
+println firstArray
+firstArray[0] = firstArray[0] - 1 + firstArray[3] - 3
+println firstArray
+
+println "\n"
+
+secondArray = [0, 1, 2, 3, 4, [6, [6, 6]]]
+println secondArray[5][0]
+
+secondArray[5][1] = "text"
+println secondArray[5][1]
+
+println "\n"
+arr = array(2, 2)
+print arr

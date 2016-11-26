@@ -1,0 +1,296 @@
+exploit "Math"
+
+// Initialize 'x_min' parameters
+x_1_min = 10 x_2_min = 25 x_3_min = 50
+// Initialize 'x_max' parameters
+x_1_max = 50 x_2_max = 65 x_3_max = 65
+
+// Create diapason of 'y'
+y_min = 229 y_max = 260
+
+// Create arrays of 'y'
+y_1_set = array(4) y_2_set = array(4) y_3_set = array(4)
+
+// Count average values of 'x_min' and 'x_max'
+x_av_max = (x_1_max + x_2_max + x_3_max) / 3
+x_av_min = (x_1_min + x_2_min + x_3_min) / 3
+
+/* @deprecated */
+// Fill table of 'x' values
+x_1_set = [x_1_min, x_1_min, x_1_max, x_1_max]
+x_2_set = [x_2_min, x_2_max, x_2_min, x_2_max]
+x_3_set = [x_3_min, x_3_max, x_3_max, x_3_min]
+
+// Fill table of 'y' values
+for i = 0; i < 4; i = i + 1 {
+    y_1_set[i] = random(y_min, y_max)
+    y_2_set[i] = random(y_min, y_max)
+    y_3_set[i] = random(y_min, y_max)
+}
+
+// Count average value of 'y' row
+y_1_av = (y_1_set[0] + y_2_set[0] + y_3_set[0]) / 3
+y_2_av = (y_1_set[1] + y_2_set[1] + y_3_set[1]) / 3
+y_3_av = (y_1_set[2] + y_2_set[2] + y_3_set[2]) / 3
+y_4_av = (y_1_set[3] + y_2_set[3] + y_3_set[3]) / 3
+
+// Count average value of 'y_av'
+my = (y_1_av + y_2_av + y_3_av + y_4_av) / 4
+
+// Count average value of 'x_set'
+mx_1 = x_1_min + x_1_min + x_1_max + x_1_max
+mx_2 = x_2_min + x_2_max + x_2_min + x_2_max
+mx_3 = x_3_min + x_3_max + x_3_max + x_3_min
+
+// Count coefficients of matrix
+a_1 = (x_1_min * y_1_av + x_1_min * y_2_av + x_1_max * y_3_av + x_1_max * y_4_av) / 4
+a_2 = (x_2_min * y_1_av + x_2_max * y_2_av + x_2_min * y_3_av + x_2_max * y_4_av) / 4
+a_3 = (x_3_min * y_1_av + x_3_max * y_2_av + x_3_max * y_3_av + x_3_min * y_4_av) / 4
+
+a_11 = (pow(x_1_min, 2) + pow(x_1_min, 2) + pow(x_1_max, 2) + pow(x_1_max, 2)) / 4
+a_22 = (pow(x_2_min, 2) + pow(x_2_max, 2) + pow(x_2_min, 2) + pow(x_2_max, 2)) / 4
+a_33 = (pow(x_3_min, 2) + pow(x_3_max, 2) + pow(x_3_max, 2) + pow(x_3_min, 2)) / 4
+
+a_12 = (x_1_min * x_2_min + x_1_min * x_2_max + x_1_max * x_2_min + x_1_max * x_2_max) / 4
+a_21 = a_12
+
+a_13 = (x_1_min * x_3_min + x_1_min * x_3_max + x_1_max * x_3_max + x_1_max * x_3_min) / 4
+a_31 = a_13
+
+a_23 = (x_2_min * x_3_min + x_2_max * x_3_max + x_2_min * x_3_max + x_2_max * x_3_min) / 4
+a_32 = a_23
+
+// Count down determinant for all coefficients
+down_part_1_1 = mainDiagonal(mx_1, a_12, a_23) + firstHalfMainDiagonal(mx_2, a_13, a_12) + secondHalfMainDiagonal(a_11, a_22, mx_3)
+down_part_1_2 = -secondaryDiagonal(mx_3, a_12, a_12) - firstHalfSecondaryDiagonal(mx_2, a_11, a_23) - secondHalfSecondaryDiagonal(a_13, a_22, mx_1)
+down_determinant_part_1 = down_part_1_1 + down_part_1_2
+down_part_1 = -mx_3 * down_determinant_part_1
+
+down_part_2_1 = mainDiagonal(1, a_12, a_23) + firstHalfMainDiagonal(mx_2, a_13, a_12) + secondHalfMainDiagonal(mx_1, a_22, mx_3)
+down_part_2_2 = -secondaryDiagonal(mx_3, a_12, mx_2) - firstHalfSecondaryDiagonal(mx_2, mx_1, a_23) - secondHalfSecondaryDiagonal(a_13, a_22, 1)
+down_determinant_part_2 = down_part_2_1 + down_part_2_2
+down_part_2 = a_13 * down_determinant_part_2
+
+down_part_3_1 = mainDiagonal(1, a_11, a_23) + firstHalfMainDiagonal(mx_1, a_13, mx_2) + secondHalfMainDiagonal(mx_1, a_12, mx_3)
+down_part_3_2 = -secondaryDiagonal(mx_3, a_11, mx_2) - firstHalfSecondaryDiagonal(mx_1, mx_1, a_23) - secondHalfSecondaryDiagonal(a_13, a_12, 1)
+down_determinant_part_3 = down_part_3_1 + down_part_3_2
+down_part_3 = -a_32 * down_determinant_part_3
+
+down_part_4_1 = mainDiagonal(1, a_11, a_22) + firstHalfMainDiagonal(mx_1, a_12, mx_2) + secondHalfMainDiagonal(mx_1, a_12, mx_2)
+down_part_4_2 = -secondaryDiagonal(mx_2, a_11, mx_2) - firstHalfSecondaryDiagonal(mx_1, mx_1, a_22) - secondHalfSecondaryDiagonal(a_12, a_12, 1)
+down_determinant_part_4 = down_part_4_1 + down_part_4_2
+down_part_4 = a_33 * down_determinant_part_4
+
+down_determinant = sum(down_part_1, down_part_2, down_part_3, down_part_4)
+
+// Count up determinant for coefficient 'b_0'
+up_part_1_1_1 = mainDiagonal(a_1, a_12, a_23) + firstHalfMainDiagonal(a_2, a_13, a_12) + secondHalfMainDiagonal(a_11, a_22, a_3)
+up_part_1_1_2 = -secondaryDiagonal(a_3, a_12, a_12) - firstHalfSecondaryDiagonal(a_2, a_11, a_23) - secondHalfSecondaryDiagonal(a_13, a_22, a_1)
+up_determinant_part_1_1 = up_part_1_1_1 + up_part_1_1_2
+up_part_1_1 = -mx_3 * up_determinant_part_1_1
+
+up_part_1_2_1 = mainDiagonal(my, a_12, a_23) + firstHalfMainDiagonal(a_2, a_13, mx_2) + secondHalfMainDiagonal(mx_1, a_22, a_3)
+up_part_1_2_2 = -secondaryDiagonal(a_3, a_12, mx_2) - firstHalfSecondaryDiagonal(a_2, mx_1, a_23) - secondHalfSecondaryDiagonal(a_13, a_22, my)
+up_determinant_part_1_2 = up_part_1_2_1 + up_part_1_2_2
+up_part_1_2 = a_13 * up_determinant_part_1_2
+
+up_part_1_3_1 = mainDiagonal(my, a_11, a_23) + firstHalfMainDiagonal(a_1, a_13, mx_2) + secondHalfMainDiagonal(mx_1, a_12, a_3)
+up_part_1_3_2 = -secondaryDiagonal(a_3, a_11, mx_2) - firstHalfSecondaryDiagonal(a_1, mx_1, a_23) - secondHalfSecondaryDiagonal(a_13, a_12, my)
+up_determinant_part_1_3 = up_part_1_3_1 + up_part_1_3_2
+up_part_1_3 = -a_32 * up_determinant_part_1_3
+
+up_part_1_4_1 = mainDiagonal(my, a_11, a_22) + firstHalfMainDiagonal(a_1, a_12, mx_2) + secondHalfMainDiagonal(mx_1, a_12, a_2)
+up_part_1_4_2 = -secondaryDiagonal(a_2, a_11, mx_2) - firstHalfSecondaryDiagonal(a_1, mx_1, a_22) - secondHalfSecondaryDiagonal(a_12, a_12, my)
+up_determinant_part_1_4 = up_part_1_4_1 + up_part_1_4_2
+up_part_1_4 = a_33 * up_determinant_part_1_4
+
+up_determinant_1 = sum(up_part_1_1, up_part_1_2, up_part_1_3, up_part_1_4)
+
+// Count coefficient 'b_0'
+b_0 = up_determinant_1 / down_determinant
+
+// Count up determinant for coefficient 'b_1'
+up_part_2_1_1 = mainDiagonal(mx_1, a_2, a_23) + firstHalfMainDiagonal(mx_2, a_3, a_12) + secondHalfMainDiagonal(a_1, a_22, mx_3)
+up_part_2_1_2 = -secondaryDiagonal(mx_3, a_2, a_12) - firstHalfSecondaryDiagonal(mx_2, a_1, a_23) - secondHalfSecondaryDiagonal(a_3, a_22, mx_1)
+up_determinant_part_2_1 = up_part_2_1_1 + up_part_2_1_2
+up_part_2_1 = -mx_3 * up_determinant_part_2_1
+
+up_part_2_2_1 = mainDiagonal(1, a_2, a_23) + firstHalfMainDiagonal(mx_2, a_3, mx_2) + secondHalfMainDiagonal(my, a_22, mx_3)
+up_part_2_2_2 = -secondaryDiagonal(mx_3, a_2, mx_2) - firstHalfSecondaryDiagonal(mx_2, my, a_23) - secondHalfSecondaryDiagonal(a_3, a_22, 1)
+up_determinant_part_2_2 = up_part_2_2_1 + up_part_2_2_2
+up_part_2_2 = a_13 * up_determinant_part_2_2
+
+up_part_2_3_1 = mainDiagonal(1, a_1, a_23) + firstHalfMainDiagonal(mx_1, a_3, mx_2) + secondHalfMainDiagonal(my, a_12, mx_3)
+up_part_2_3_2 = -secondaryDiagonal(mx_3, a_1, mx_2) - firstHalfSecondaryDiagonal(mx_1, my, a_23) - secondHalfSecondaryDiagonal(a_3, a_12, 1)
+up_determinant_part_2_3 = up_part_2_3_1 + up_part_2_3_2
+up_part_2_3 = -a_32 * up_determinant_part_2_3
+
+up_part_2_4_1 = mainDiagonal(1, a_1, a_22) + firstHalfMainDiagonal(mx_1, a_2, mx_2) + secondHalfMainDiagonal(my, a_12, mx_2)
+up_part_2_4_2 = -secondaryDiagonal(mx_2, a_1, mx_2) - firstHalfSecondaryDiagonal(mx_1, my, a_22) - secondHalfSecondaryDiagonal(a_2, a_12, 1)
+up_determinant_part_2_4 = up_part_2_4_1 + up_part_2_4_2
+up_part_2_4 = a_33 * up_determinant_part_2_4
+
+up_determinant_2 = sum(up_part_2_1, up_part_2_2, up_part_2_3, up_part_2_4)
+
+// Count coefficient 'b_1'
+b_1 = up_determinant_2 / down_determinant
+
+// Count up determinant for coefficient 'b_2'
+up_part_3_1_1 = mainDiagonal(mx_1, a_12, a_3) + firstHalfMainDiagonal(mx_2, a_13, a_1) + secondHalfMainDiagonal(a_11, a_2, mx_3)
+up_part_3_1_2 = -secondaryDiagonal(mx_3, a_12, a_1) - firstHalfSecondaryDiagonal(mx_2, a_11, a_3) - secondHalfSecondaryDiagonal(a_13, a_2, mx_1)
+up_determinant_part_3_1 = up_part_3_1_1 + up_part_3_1_2
+up_part_3_1 = -mx_3 * up_determinant_part_3_1
+
+up_part_3_2_1 = mainDiagonal(1, a_12, a_3) + firstHalfMainDiagonal(mx_2, a_13, my) + secondHalfMainDiagonal(mx_1, a_2, mx_3)
+up_part_3_2_2 = -secondaryDiagonal(mx_3, a_12, my) - firstHalfSecondaryDiagonal(mx_2, mx_1, a_3) - secondHalfSecondaryDiagonal(a_13, a_2, 1)
+up_determinant_part_3_2 = up_part_3_2_1 + up_part_3_2_2
+up_part_3_2 = a_13 * up_determinant_part_3_2
+
+up_part_3_3_1 = mainDiagonal(1, a_11, a_3) + firstHalfMainDiagonal(mx_1, a_13, my) + secondHalfMainDiagonal(mx_1, a_1, mx_3)
+up_part_3_3_2 = -secondaryDiagonal(mx_3, a_11, my) - firstHalfSecondaryDiagonal(mx_1, mx_1, a_3) - secondHalfSecondaryDiagonal(a_13, a_1, 1)
+up_determinant_part_3_3 = up_part_3_3_1 + up_part_3_3_2
+up_part_3_3 = -a_32 * up_determinant_part_3_3
+
+up_part_3_4_1 = mainDiagonal(1, a_11, a_2) + firstHalfMainDiagonal(mx_1, a_12, my) + secondHalfMainDiagonal(mx_1, a_1, mx_2)
+up_part_3_4_2 = -secondaryDiagonal(mx_2, a_11, my) - firstHalfSecondaryDiagonal(mx_1, mx_1, a_2) - secondHalfSecondaryDiagonal(a_12, a_1, 1)
+up_determinant_part_3_4 = up_part_3_4_1 + up_part_3_4_2
+up_part_3_4 = a_33 * up_determinant_part_3_4
+
+up_determinant_3 = sum(up_part_3_1, up_part_3_2, up_part_3_3, up_part_3_4)
+
+// Count coefficient 'b_2'
+b_2 = up_determinant_3 / down_determinant
+
+// Count up determinant for coefficient 'b_3'
+up_part_4_1_1 = mainDiagonal(mx_1, a_22, a_23) + firstHalfMainDiagonal(mx_2, a_33, a_12) + secondHalfMainDiagonal(a_11, a_22, mx_3)
+up_part_4_1_2 = -secondaryDiagonal(mx_3, a_22, a_12) - firstHalfSecondaryDiagonal(mx_2, a_11, a_23) - secondHalfSecondaryDiagonal(a_33, a_22, mx_1)
+up_determinant_part_4_1 = up_part_4_1_1 + up_part_4_1_2
+up_part_4_1 = -my * up_determinant_part_4_1
+
+up_part_4_2_1 = mainDiagonal(1, a_22, a_23) + firstHalfMainDiagonal(mx_2, a_33, mx_2) + secondHalfMainDiagonal(mx_1, a_22, mx_3)
+up_part_4_2_2 = -secondaryDiagonal(mx_3, a_22, mx_2) - firstHalfSecondaryDiagonal(mx_2, mx_1, a_23) - secondHalfSecondaryDiagonal(a_33, a_22, 1)
+up_determinant_part_4_2 = up_part_4_2_1 + up_part_4_2_2
+up_part_4_2 = a_1 * up_determinant_part_4_2
+
+up_part_4_3_1 = mainDiagonal(1, a_11, a_23) + firstHalfMainDiagonal(mx_1, a_23, mx_2) + secondHalfMainDiagonal(mx_1, a_12, mx_3)
+up_part_4_3_2 = -secondaryDiagonal(mx_3, a_11, mx_2) - firstHalfSecondaryDiagonal(mx_1, mx_1, a_23) - secondHalfSecondaryDiagonal(a_33, a_12, 1)
+up_determinant_part_4_3 = up_part_4_3_1 + up_part_4_3_2
+up_part_4_3 = -a_2 * up_determinant_part_4_3
+
+up_part_4_4_1 = mainDiagonal(1, a_11, a_22) + firstHalfMainDiagonal(mx_1, a_22, mx_2) + secondHalfMainDiagonal(mx_1, a_12, mx_2)
+up_part_4_4_2 = -secondaryDiagonal(mx_2, a_11, mx_2) - firstHalfSecondaryDiagonal(mx_1, mx_1, a_22) - secondHalfSecondaryDiagonal(a_22, a_12, 1)
+up_determinant_part_4_4 = up_part_4_4_1 + up_part_4_4_2
+up_part_4_4 = a_3 * up_determinant_part_4_4
+
+up_determinant_4 = sum(up_part_4_1, up_part_4_2, up_part_4_3, up_part_4_4)
+
+// Count coefficient 'b_3'
+b_3 = up_determinant_4 / down_determinant
+
+// Display regression equation
+if (b_1 < 0 && b_2 < 0 && b_3 < 0) {
+    println "*** Regression equation: y = " + b_0 + " + (" + b_1 + ")⋅X₁ " + " + (" + b_2 + ")⋅X₂ " + " + (" + b_3 + ")⋅X₃"
+} else if (b_1 < 0 && b_2 < 0 && b_3 > 0) {
+    println "*** Regression equation: y = " + b_0 + " + (" + b_1 + ")⋅X₁" + " + (" + b_2 + ")⋅X₂" + " + " + b_3 + "⋅X₃"
+} else if (b_1 < 0 && b_2 > 0 && b_3 > 0) {
+    println "*** Regression equation: y = " + b_0 + " + (" + b_1 + ")⋅X₁" + " + " + b_2 + "⋅X₂" + " + " + b_3 + "⋅X₃"
+} else if (b_1 > 0 && b_2 < 0 && b_3 > 0 {
+    println "*** Regression equation: y = " + b_0 + " + " + b_1 + "⋅X₁" + " + (" + b_2 + ")⋅X₂" + " + " + b_3 + "⋅X₃"
+} else {
+    println "*** Regression equation: y = " + b_0 + " + " + b_1 + "⋅X₁" + " + " + b_2 + "⋅X₂" + " + " + b_3 + "⋅X₃"
+}
+
+// Count dispersion per row
+dispersion_y_1 = (pow(y_1_set[0] - y_1_av, 2) + pow(y_2_set[0] - y_1_av, 2) + pow(y_3_set[0] - y_1_av, 2)) / 3
+dispersion_y_2 = (pow(y_1_set[1] - y_2_av, 2) + pow(y_2_set[1] - y_2_av, 2) + pow(y_3_set[1] - y_2_av, 2)) / 3
+dispersion_y_3 = (pow(y_1_set[2] - y_3_av, 2) + pow(y_2_set[2] - y_3_av, 2) + pow(y_3_set[2] - y_3_av, 2)) / 3
+dispersion_y_4 = (pow(y_1_set[3] - y_4_av, 2) + pow(y_2_set[3] - y_4_av, 2) + pow(y_3_set[3] - y_4_av, 2)) / 3
+
+// Check Kohren criteria
+criteria_part_1 = maximum(dispersion_y_1, dispersion_y_2, dispersion_y_3, dispersion_y_4)
+criteria_part_2 = sum(dispersion_y_1, dispersion_y_2, dispersion_y_3, dispersion_y_4)
+kohren_criteria = criteria_part_1 / criteria_part_2
+
+// Display results of checking Kohren criteria
+println "*** Coefficient of Kohren criteria is: " + kohren_criteria
+if (kohren_criteria < 0.7679) println "*** Dispersion: uniform"
+else println "*** Dispersion: not uniform"
+
+// Check Student criteria
+av_dispersion = sum(dispersion_y_1, dispersion_y_2, dispersion_y_3, dispersion_y_4) / 4
+beta_dispersion = av_dispersion / 12
+standard_beta = sqrt(beta_dispersion)
+
+// Count 'bi', i = 0..3
+beta_0 = (y_1_av * 1 + y_2_av * 1 + y_3_av * 1 + y_4_av * 1) / 4
+beta_1 = (y_1_av * (-1) + y_2_av * (-1) + y_3_av * 1 + y_4_av * 1) / 4
+beta_2 = (y_1_av * (-1) + y_2_av * 1 + y_3_av * (-1) + y_4_av * 1) / 4
+beta_3 = (y_1_av * (-1) + y_2_av * 1 + y_3_av * 1 + y_4_av * (-1)) / 4
+
+// Count 'ti', i = 0..3
+t_0 = abs(beta_0) / standard_beta
+t_1 = abs(beta_1) / standard_beta
+t_2 = abs(beta_2) / standard_beta
+t_3 = abs(beta_3) / standard_beta
+
+// Display results of checking Student criteria
+st_y_1 = 0 st_y_2 = 0 st_y_3 = 0 st_y_4 = 0
+minor = 0
+
+if t_1 < 2.306 && t_2 < 2.306 && t_3 < 2.306 {
+    minor = 3
+    println "*** Minor coefficients: b1, b2, b3"
+    println "*** New regression equation: y = " + b_0
+    st_y_1 = b_0
+    st_y_2 = b_0
+    st_y_3 = b_0
+    st_y_4 = b_0
+} else if (t_1 < 2.306 && t_2 < 2.306) {
+    minor = 2
+    println "*** Minor coefficients: b1, b2"
+    if (b_3 < 0) println "*** Regression equation: y = " + b_0 + " + (" + b_3 + ")⋅X₃"
+    else println "*** Regression equation: y = " + b_0 + " + " + b_3 + "⋅X₃"
+    st_y_1 = b_0 + b_3 * x_3_min
+    st_y_2 = b_0 + b_3 * x_3_max
+    st_y_3 = b_0 + b_3 * x_3_max
+    st_y_4 = b_0 + b_3 * x_3_min
+} else if (t_1 < 2.306 && t_3 < 2.306) {
+    minor = 2
+    println "*** Minor coefficients: b1, b3"
+    if (b_2 < 0) println "*** Regression equation: y = " + b_0 + " + (" + b_3 + ")⋅X₂"
+    else println "*** Regression equation: y = " + b_0 + " + " + b_2 + "⋅X₂"
+    st_y_1 = b_0 + b_2 * x_2_min
+    st_y_2 = b_0 + b_2 * x_2_max
+    st_y_3 = b_0 + b_2 * x_2_min
+    st_y_4 = b_0 + b_2 * x_2_max
+} else if (t_2 < 2.306 && t_3 < 2.306) {
+    minor = 2
+    println "*** Minor coefficients: b2, b3"
+    if (b_1 < 0) println "*** Regression equation: y = " + b_0 + " + (" + b_1 + ")⋅X₁"
+    else println "*** Regression equation: y = " + b_0 + " + " + b_1 + "⋅X₁"
+    st_y_1 = b_0 + b_1 * x_1_min
+    st_y_2 = b_0 + b_1 * x_1_min
+    st_y_3 = b_0 + b_1 * x_1_max
+    st_y_4 = b_0 + b_1 * x_1_max
+} else println "*** Minor coefficients: none"
+
+// Check Fisher criteria
+fisher_dispersion = (3 / (4 - minor)) * (pow(st_y_1 - y_1_av, 2) + pow(st_y_2 - y_2_av, 2) + pow(st_y_3 - y_3_av, 2) + pow(st_y_4 - y_4_av, 2))
+fisher_criteria = fisher_dispersion / standard_beta
+
+// Display results of checking Fisher criteria
+if (fisher_criteria > 4.5) println "*** Regression equation is inadequate to original regression at significance level 0.05"
+else println "*** Regression equation is adequate to original regression at significance level 0.05"
+
+// Support determinant count functions
+def mainDiagonal(a11, a22, a33) { return a11 * a22 * a33 }
+def firstHalfMainDiagonal(a12, a23, a31) { return a12 * a23 * a31 }
+def secondHalfMainDiagonal(a21, a32, a13) { return a21 * a32 * a13 }
+def secondaryDiagonal(a31, a22, a13) { return a31 * a22 * a13 }
+def firstHalfSecondaryDiagonal(a12, a21, a31) { return a12 * a21 * a31 }
+def secondHalfSecondaryDiagonal(a23, a32, a11) { return a23 * a32 * a11 }
+
+// Support program functions
+def sum(a, b, c, d) { return a + b + c + d }
+def maximum(a, b, c, d) { return max(max(a, b), max(c, d)) }
+

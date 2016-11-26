@@ -1,0 +1,7 @@
+exploit "Thread"
+
+// Display message 5 times every 0.5 seconds
+for i = 0; i < 5; i = i + 1 {
+    println "Hello air"
+    sleep(500)
+}

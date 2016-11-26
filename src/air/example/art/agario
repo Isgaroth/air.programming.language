@@ -1,0 +1,92 @@
+exploit "Art"
+exploit "Math"
+exploit "Thread"
+
+width = 800
+ height = 600
+
+half_width = width / 2
+half_height = height / 2
+
+window("Agar.io analogue", width, height)
+
+// Create field
+field_width = 5000 field_height = 3000
+field_x = random(field_width) - half_width
+field_y = random(field_height) - half_height
+
+// Points
+point_maximum = 700
+points = array(4, point_maximum)
+
+for i = 0; i < point_maximum; i = i + 1 {
+    points[0][i] = random(field_width)
+    points[1][i] = random(field_height)
+    points[2][i] = 6 + random(2)
+    points[3][i] = random(#ffffff)
+}
+
+// Player
+player_size = 8
+player_color = random(#ffffff)
+
+flag = 1
+
+while flag {
+    motion = mouseMotion()
+    angle = polar(motion[1] - half_height, motion[0] - half_width)
+    field_x = field_x + cos(angle) * 50 / player_size
+    field_y = field_y + sin(angle) * 50 / player_size
+
+    if (field_x < -half_width) field_x = -half_width
+    else if (field_x > field_width - half_width - 1) field_x = field_width - half_width - 1
+
+    if (field_y < -half_height) field_y = -half_height
+    else if (field_y > field_height - 1) field_y = field_height - half_height - 1
+
+   // Clear screen
+   color(#ffffff)
+   fillRectangle(0, 0, width, height)
+
+   // Draw border
+   color(#333333)
+   rectangle(-field_x, -field_y, field_width, field_height)
+
+   // Draw points
+   for i = 0; i < point_maximum; i = i + 1 {
+        dx = points[0][i] - field_x - half_width
+        dy = points[1][i] - field_y - half_height
+        radius = random(points[2][i] + player_size, points[2][i] + player_size + 3)
+
+        // If collision happened
+        if (pow(dx, 2) + pow(dy, 2) < pow(radius, 2)) {
+            player_size = player_size + 1
+            points[0][i] = random(width)
+            points[1][i] = random(height)
+            points[2][i] = 6 + random(2)
+            points[3][i] = random(#ff00ff)
+        }
+
+        // Draw points
+        color(points[3][i])
+        circle(points[0][i] - field_x, points[1][i] - field_y, points[2][i])
+   }
+
+   // Draw player
+   color(player_color)
+   circle(half_width, half_height, player_size)
+
+   // Draw text
+   color(0)
+   result_title = "Result  "
+   result_x = 710 result_y = 25
+   if player_size < 350 text(result_title + player_size, result_x, result_y)
+   else text("", result_x, result_y)
+
+   repaint()
+   sleep(5)
+}
+
+def circle(cx, cy, radius) {
+    oval(cx - radius, cy - radius, 2 * radius, 2 * radius)
+}

@@ -1,0 +1,37 @@
+exploit "Math"
+
+// Calculate inverse trigonometric functions
+println "INVERSE TRIGONOMETRIC FUNCTIONS:"
+echo(acos(0.2365), asin(0.3321), atan(0.1475), "")
+
+// Calculate trigonometric functions (in radians)
+println "TRIGONOMETRIC FUNCTIONS:"
+echo(cos(20), sin(30.51), tan(215), "")
+
+// Convert radians to degrees
+println "CONVERT RADIANS TO DEGREES:"
+echo(toDegrees(10), "")
+
+// Convert degrees to radians
+println "CONVERT DEGREES TO RADIANS:"
+echo(toRadians(60), "")
+
+// Calculate logarithms
+println "LOGARITHMS:"
+echo(log(10), log10(10), "")
+
+// Calculate absolute value
+println "ABSOLUTE VALUE: " + abs(-5) + "\n"
+
+// Calculate square root
+println "SQUARE ROOT: " + sqrt(16) + "\n"
+
+// Calculate raising to the power
+echo("RAISING TO THE POWER: " + pow(2, 2), "INVERSE RAISING TO THE POWER: " + pow (9, 1/2), "")
+
+// Calculate random value from -100 to 100
+echo("RANDOM VALUE: " + random(-100, 100), "")
+
+// Display constants
+echo("CONSTANTS:", "PI: " + PI, "GR: " + GR, "E: " + E)
+
