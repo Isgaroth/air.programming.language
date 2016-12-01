@@ -17,8 +17,8 @@ public enum TokenType {
 
     PRINT, PRINTLN,
 
-    // + - * / =
-    ADD, SUB, MUL, DIV, EQUAL,
+    // + - * / = %
+    ADD, SUB, MUL, DIV, EQUAL, MOD,
 
     // ( ) { } [ ]
     LEFT_BRACKET, RIGHT_BRACKET,

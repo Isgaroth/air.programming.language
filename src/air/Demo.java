@@ -17,14 +17,15 @@ public class Demo {
     private static final String LAB_PATH = "D:/&projects/ide/Intellij IDEA/air.programming.language/src/air/example/ted/lab3";
     private static final String ART_PATH = "D:/&projects/ide/Intellij IDEA/air.programming.language/src/air/example/art/agario";
     private static final String DEFAULT_PATH = "D:/&projects/ide/Intellij IDEA/air.programming.language/src/air/example/demo.air";
+    private static final String SP_3 = "D:/&projects/ide/Intellij IDEA/air.programming.language/src/air/example/system/programming/lab3";
+    private static final String SP_7 = "D:/&projects/ide/Intellij IDEA/air.programming.language/src/air/example/system/programming/lab7";
 
     public static void main(String[] arguments) throws IOException {
-        String input = new String(Files.readAllBytes(Paths.get(LAB_PATH)), "UTF-8");
+        String input = new String(Files.readAllBytes(Paths.get(DEFAULT_PATH)), "UTF-8");
         List<Token> tokenList = new Lexer(input).createToken();
         //tokenList.forEach(System.out::println); // print tree
 
         Statement statement = new Parser(tokenList).parse();
-        //System.out.println(statement.toString()); // print statement
         statement.accept(new FunctionAdder());
         statement.accept(new ConstantValidator());
         statement.launch();

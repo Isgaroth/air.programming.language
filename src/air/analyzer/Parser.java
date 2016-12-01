@@ -273,6 +273,10 @@ public class Parser {
                 expression = new ArithmeticExpression('/', expression, unaryExpression());
                 continue;
             }
+            if (isMatches(TokenType.MOD)) {
+                expression = new ArithmeticExpression('%', expression, unaryExpression());
+                continue;
+            }
             break;
         }
         return expression;

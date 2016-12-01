@@ -45,6 +45,9 @@ public class ArithmeticExpression implements Expression {
             case '/': {
                 return new NumberValue(fNumber / sNumber);
             }
+            case '%': {
+                return new NumberValue(fNumber % sNumber);
+            }
             case '+': default: {
                 return new NumberValue(fNumber + sNumber);
             }

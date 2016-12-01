@@ -10,16 +10,16 @@ import java.util.Map;
 
 public class Lexer {
 
-    private static final String OPERATOR_CHAR = "+-*/(){}[]=<>!&|;,:?";
+    private static final String OPERATOR_CHAR = "+-*/%(){}[]=<>!&|;,:?";
     private static final String WARNING_MESSAGE_1 = "Invalid float number";
     private static final String WARNING_MESSAGE_2 = "Missing close comment tag";
     private static final Map<String, TokenType> OPERATOR_TOKEN;
     private static final String[] CHAR = {
-            "+", "-", "*", "/", "(", ")", "{", "}", "[", "]", "=", "<", ">", "!",
+            "+", "-", "*", "/", "%", "(", ")", "{", "}", "[", "]", "=", "<", ">", "!",
             "&", "|", "==", "!=", "<=", ">=", "&&", "||", ";", ",", ":", "?"
     };
     private static final TokenType[] TYPE = {
-            TokenType.ADD, TokenType.SUB, TokenType.MUL, TokenType.DIV, TokenType.LEFT_BRACKET,
+            TokenType.ADD, TokenType.SUB, TokenType.MUL, TokenType.DIV, TokenType.MOD, TokenType.LEFT_BRACKET,
             TokenType.RIGHT_BRACKET, TokenType.BLOCK_BEGIN, TokenType.BLOCK_END, TokenType.L_ARRAY_BRACKET,
             TokenType.R_ARRAY_BRACKET, TokenType.EQUAL, TokenType.LT, TokenType.GT, TokenType.LNOT,
             TokenType.LAND, TokenType.LOR, TokenType.D_EQUAL, TokenType.LNOT_EQUAL, TokenType.LT_EQUAL,
